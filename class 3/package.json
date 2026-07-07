@@ -1,0 +1,14 @@
+{
+  "name": "class-3",
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [],
+  "license": "ISC",
+  "author": "Kashif",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "start-dev": "node --watch server.js"
+  }
+}
