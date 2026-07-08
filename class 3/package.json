@@ -9,6 +9,9 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "start-dev": "node --watch server.js"
+    "start-dev": "node server.js"
+  },
+  "dependencies": {
+    "nodemon": "^3.1.14"
   }
 }
