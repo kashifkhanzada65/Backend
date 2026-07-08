@@ -4,16 +4,22 @@ const PORT = 3000
 
 const server = http.createServer((request, response) => {
     if (request.url === '/create-user') {
-        const userObj = {
+
+        const userObj = [{
             name: 'Muhammad Kashif',
             email: 'kashif123@gmail.com',
             password: 5678
-        }
+        }]
 
-        fs.writeFileSync('user.data', JSON.stringify(userObj))
+        fs.writeFileSync('user.data', JSON.stringify(userObj, null, 2))
         response.end('user created!')
     } else if (request.url === "/another-user") {
-        // const userData = JSON.parse(fs.readFileSync('user.data', 'utf-8'))
+        const userData = JSON.parse(fs.readFileSync('user.data', 'utf-8'))
+
+        if (userData.length === 0) {
+            console.log('Error');
+            return
+        }
 
         const userObj = {
             name: 'Sir Jaffar aman',
@@ -21,15 +27,22 @@ const server = http.createServer((request, response) => {
             password: 123456
         }
 
-        fs.appendFileSync('user.data', JSON.stringify(userObj))
+        const userExists = userData.find(
+            user => user.email === userObj.email
+        );
 
+        if (userExists) {
+            response.end("User already exists");
+        } else {
+            userData.push(userObj);
 
+            fs.writeFileSync(
+                "user.data",
+                JSON.stringify(userData, null, 2)
+            );
 
-        // response.setHeader('Content-Type', 'application/json');
-        // response.end(JSON.stringify(userData))
-        response.end("another user create")
-        // console.log(userData);
-
+            response.end("Another user created");
+        }
 
     }
 })
