@@ -1,0 +1,14 @@
+[
+  {
+    "name": "Mehmood Rashif",
+    "age": "17",
+    "email": "mehmood@gmail.com",
+    "password": "123456"
+  },
+  {
+    "name": "Hello world!",
+    "age": "17",
+    "email": "hello@gmail.com",
+    "password": "123456"
+  }
+]
