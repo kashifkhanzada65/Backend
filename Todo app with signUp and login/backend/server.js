@@ -110,6 +110,27 @@ app.post('/login', async (req, res) => {
 })
 
 
+app.get("/get-single-user/:id", async (req, res) => {
+    try {
+        const userId = req.params.id
+        console.log("userId", userId);
+        const userData = await userModel.findById(userId)
+        res.json({
+            message: "fetch single user",
+            data: userData,
+            status: true
+        })
+
+    } catch (error) {
+        res.json({
+            message: error.message || "something went wrong",
+            data: null,
+            status: false
+        })
+    }
+})
+
+
 
 
 

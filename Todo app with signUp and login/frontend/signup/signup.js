@@ -1,3 +1,13 @@
+const authCheck = (() => {
+    const userId = localStorage.getItem("user")
+    console.log(userId);
+    
+    if (userId) {
+        window.location.replace("../dashboard/dashboard.html")
+        return
+    }
+})()
+
 const signUpHandler = async () => {
 
     try {
@@ -42,6 +52,7 @@ const signUpHandler = async () => {
 
         if (res.status) {
             alert("sign Successfully")
+            window.location.assign("../login/login.html")
         } else {
             alert(res.message)
         }
