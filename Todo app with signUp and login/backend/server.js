@@ -3,6 +3,7 @@ import mongoose from "mongoose"
 import cors from "cors"
 import userModel from "./models/user.js"
 import { setServers } from 'node:dns/promises';
+import todoModel from "./models/todo.js";
 const PORT = 5000
 const app = express()
 app.use(express.json())
@@ -130,9 +131,87 @@ app.get("/get-single-user/:id", async (req, res) => {
     }
 })
 
+// Todo CRUD 
+// app.get('./create-todo')      wrong way
+// app.post('./get-todo')     wrong way
+// app.put('./update-todo')     wrong way
+// app.delete('./delete-todo')     wrong way
+
+app.post("/todo", async (req, res) => {
+    try {
+        const body = req.body
+        console.log(body);
+
+        if (!body.title || !body.desc || !body.priority || !body.dueDate) {
+            return res.json({
+                message: "required fields are missing",
+                status: false
+            })
+        }
+
+        await todoModel.create(body)
+        res.json({
+            message: "Todo created",
+            status: true
+        })
+
+    } catch (error) {
+        res.json({
+            message: error.message || "something went wrong",
+            status: false
+        })
+    }
+})
+
+app.get("/todo", async (req, res) => {
+    try {
+        const todoId = req.query.todoId
+        console.log(todoId);
+        if (todoId) {
+            const singleData = await todoModel.findById(todoId)
+            res.json({
+                message: "Single todo fetch",
+                singleData: singleData,
+                status: true
+            })
+        } else {
+            const data = await todoModel.find({})
+
+            res.json({
+                message: "All todo fetch",
+                data: data,
+                status: true
+            })
+        }
 
 
 
+    } catch (error) {
+        res.json({
+            message: error.message || "something went wrong",
+            status: false
+        })
+    }
+})
+
+
+app.put("/todo", async (req, res) => {
+    try {
+        const body = req.body
+
+    } catch (error) {
+
+    }
+})
+
+app.delete("/todo", async (req, res) => {
+    try {
+        const body = req.body
+
+    } catch (error) {
+
+    }
+})
 
 
 

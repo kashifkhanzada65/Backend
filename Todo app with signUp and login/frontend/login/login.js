@@ -1,7 +1,7 @@
 const authCheck = (() => {
     const userId = localStorage.getItem("user")
     console.log(userId);
-    
+
     if (userId) {
         window.location.replace("../dashboard/dashboard.html")
         return
@@ -43,20 +43,8 @@ const loginHandler = async () => {
         localStorage.setItem("user", res.data._id)
         alert(res.message)
         window.location.replace('../dashboard/dashboard.html')
-    }else{
+    } else {
         alert(res.message)
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
+
