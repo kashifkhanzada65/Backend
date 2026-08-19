@@ -1,3 +1,5 @@
+import { BASE_URL } from "../config.js"
+
 const authCheck = (async () => {
     const userId = localStorage.getItem("user")
     // console.log(userId);
@@ -6,7 +8,7 @@ const authCheck = (async () => {
         window.location.replace("../login/login.html")
         return
     }
-    const getCurrentUser = await fetch(`http://localhost:5000/get-single-user/${userId}`).then(res => res.json())
+    const getCurrentUser = await fetch(`${BASE_URL}/get-single-user/${userId}`).then(res => res.json())
     // console.log("getCurrentUser", getCurrentUser);
 
     if (!getCurrentUser.status) {
@@ -15,6 +17,47 @@ const authCheck = (async () => {
     }
     localStorage.setItem("userInfo", JSON.stringify(getCurrentUser.data))
     document.getElementById("dashboardHeading").innerHTML = `Hello ${getCurrentUser.data.fullName}`
+})()
+
+const parent = document.getElementById('parent')
+
+const getAllTodo = (async () => {
+
+    const todoData = await fetch(`${BASE_URL}/todo`).then(res => res.json())
+
+    if (!todoData.status) {
+        return alert(todoData.message)
+    }
+    const todos = todoData.data
+
+    todos.forEach((obj) => {
+        // console.log(obj);
+
+        parent.innerHTML += ` 
+        
+            <div class="todo-card">
+
+                <div class="todo-content">
+                    <h3>${obj.title}</h3>
+                    <p>${obj.desc}</p>
+
+                    <div class="meta">
+                        <span class='priority ${obj.priority.toLowerCase()}'>${obj.priority}</span>
+                        <span>${obj.dueDate}</span>
+                    </div>
+                </div>
+
+                <div class="actions">
+                    <button class="edit">Edit</button>
+                    <button class="delete">Delete</button>
+                </div>
+
+            </div>`
+
+    });
+
+
+
 })()
 
 const logoutHandler = () => {
@@ -38,7 +81,7 @@ const createTodo = async () => {
         }
 
 
-        const res = await fetch("http://localhost:5000/todo", {
+        const res = await fetch(`${BASE_URL}/todo`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -64,3 +107,6 @@ const createTodo = async () => {
     }
 }
 
+
+window.logoutHandler = logoutHandler
+window.createTodo = createTodo
