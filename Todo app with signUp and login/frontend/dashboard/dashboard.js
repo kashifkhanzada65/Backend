@@ -21,7 +21,7 @@ const authCheck = (async () => {
 
 const parent = document.getElementById('parent')
 
-const getAllTodo = (async () => {
+const getAllTodo = async () => {
 
     const todoData = await fetch(`${BASE_URL}/todo`).then(res => res.json())
 
@@ -29,7 +29,7 @@ const getAllTodo = (async () => {
         return alert(todoData.message)
     }
     const todos = todoData.data
-
+    parent.innerHTML = ""
     todos.forEach((obj) => {
         // console.log(obj);
 
@@ -43,22 +43,19 @@ const getAllTodo = (async () => {
 
                     <div class="meta">
                         <span class='priority ${obj.priority.toLowerCase()}'>${obj.priority}</span>
-                        <span>${obj.dueDate}</span>
+                        ${obj.dueDate && `<span>${obj.dueDate}</span>`}
                     </div>
                 </div>
 
                 <div class="actions">
-                    <button class="edit">Edit</button>
+                    <button id="${obj._id}" onclick="editTodo(this)" class="edit">Edit</button>
                     <button class="delete">Delete</button>
                 </div>
 
             </div>`
 
     });
-
-
-
-})()
+}
 
 const logoutHandler = () => {
     localStorage.clear()
@@ -94,13 +91,12 @@ const createTodo = async () => {
         }
 
         alert(res.message)
-
         document.getElementById("title").value = ""
         document.getElementById("desc").value = ""
         document.getElementById("priority").value = ""
         document.getElementById("date").value = ""
 
-
+        getAllTodo()
 
     } catch (error) {
         alert(error)
@@ -108,5 +104,42 @@ const createTodo = async () => {
 }
 
 
+const editTodo = async (ele) => {
+    try {
+        const editTodoValue = prompt("edit todo value")
+        const editDescValue = prompt("edit desc value")
+
+        const obj = {
+            title: editTodoValue,
+            desc: editDescValue
+        }
+
+        const res = await fetch(`${BASE_URL}/todo/${ele.id}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(obj)
+        }).then(res => res.json())
+
+        if (!res.status) {
+            alert(res.message)
+        } else {
+            alert(res.message)
+            getAllTodo()
+        }
+
+
+    } catch (error) {
+        alert(error.message)
+    }
+
+
+
+}
+
+
 window.logoutHandler = logoutHandler
 window.createTodo = createTodo
+window.getAllTodo = getAllTodo
+window.editTodo = editTodo

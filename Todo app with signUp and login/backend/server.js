@@ -166,7 +166,7 @@ app.post("/todo", async (req, res) => {
 app.get("/todo", async (req, res) => {
     try {
         const todoId = req.query.todoId
-        console.log(todoId);
+        // console.log(todoId);
         if (todoId) {
             const singleData = await todoModel.findById(todoId)
             res.json({
@@ -195,22 +195,35 @@ app.get("/todo", async (req, res) => {
 })
 
 
-app.put("/todo", async (req, res) => {
+app.put("/todo/:todoId", async (req, res) => {
     try {
+        const todoId = req.params.todoId
         const body = req.body
+        if (!todoId) {
+            return res.json({
+                meaasge: "Id required",
+                status: false
+            })
+        }
+
+        await todoModel.findByIdAndUpdate(todoId, body)
+        res.json({
+            message: "edit successfully!",
+            status: true
+        })
+
+
 
     } catch (error) {
-
+        res.json({
+            message: error.message || "Something went wrong",
+            status: false
+        })
     }
 })
 
 app.delete("/todo", async (req, res) => {
-    try {
-        const body = req.body
 
-    } catch (error) {
-
-    }
 })
 
 
